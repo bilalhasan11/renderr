@@ -1,7 +1,7 @@
-from fastapi import FastAPI, File, UploadFile
+import os
 import requests
 import shutil
-import os
+from fastapi import FastAPI, UploadFile, File
 
 app = FastAPI()
 
@@ -26,3 +26,9 @@ async def analyze_audio(file: UploadFile = File(...)):
         return response.json()
     else:
         return {"error": "Failed to process audio", "details": response.text}
+
+# Ensure FastAPI runs on the correct port
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))  # Default to 8000 if PORT is not set
+    uvicorn.run(app, host="0.0.0.0", port=port)
